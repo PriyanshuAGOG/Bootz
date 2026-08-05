@@ -37,10 +37,14 @@ jobs:
           sudo apt-get install -y ffmpeg
       - name: Download and normalize real Pexels footage
         run: bash scripts/dayara_stock.sh
-      - name: Upload stock pack
+      - name: Upload normalized stock clips
         uses: actions/upload-artifact@v4
         with:
-          name: dayara-stock-pack
-          path: dayara-stock-pack
-          compression-level: 0
+          name: dayara-stock-pack-lite
+          path: |
+            dayara-stock-pack/clips
+            dayara-stock-pack/previews
+            dayara-stock-pack/downloaded.txt
+            dayara-stock-pack/manifest.txt
+          compression-level: 6
           retention-days: 2
