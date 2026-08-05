@@ -36,10 +36,12 @@ while IFS='|' read -r filename id; do
   start=$(awk -v d="$duration" 'BEGIN{s=(d-12)/2;if(s<0)s=0;printf "%.3f",s}')
   ffmpeg -nostdin -y -ss "$start" -i "$raw" -t 12 \
     -vf "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,fps=30,eq=contrast=1.035:saturation=1.08:brightness=0.015,format=yuv420p" \
-    -an -c:v libx264 -preset veryfast -crf 23 -movflags +faststart "$out"
-  ffmpeg -nostdin -y -ss 2 -i "$out" -frames:v 1 -update 1 -q:v 2 "$OUT/previews/${filename%.mp4}.jpg"
+    -an -c:v libx264 -preset veryfast -crf 24 -movflags +faststart "$out"
+  ffmpeg -nostdin -y -ss 2 -i "$out" -frames:v 1 -update 1 -q:v 3 "$OUT/previews/${filename%.mp4}.jpg"
+  rm -f "$raw"
 done < "$OUT/manifest.txt"
 
+rm -rf "$OUT/raw"
 find "$OUT/clips" -type f -name '*.mp4' -printf '%f\n' | sort > "$OUT/downloaded.txt"
 count=$(find "$OUT/clips" -type f -name '*.mp4' | wc -l)
 echo "Downloaded $count usable clips"
