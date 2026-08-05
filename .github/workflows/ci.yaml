@@ -22,29 +22,3 @@ jobs:
 
       - name: Run tests
         run: pnpm run test
-
-  dayara-stock:
-    name: Prepare Dayara Stock Footage
-    if: contains(github.event.pull_request.title, 'Dayara stock-footage')
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install FFmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-      - name: Download and normalize real Pexels footage
-        run: bash scripts/dayara_stock.sh
-      - name: Upload normalized stock clips
-        uses: actions/upload-artifact@v4
-        with:
-          name: dayara-stock-pack-lite
-          path: |
-            dayara-stock-pack/clips
-            dayara-stock-pack/previews
-            dayara-stock-pack/downloaded.txt
-            dayara-stock-pack/manifest.txt
-          compression-level: 6
-          retention-days: 2
